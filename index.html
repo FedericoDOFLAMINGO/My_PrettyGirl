@@ -70,7 +70,7 @@ button.in{opacity:1}
 @keyframes pulse{50%{transform:scale(1.07)}}
 #ov{overflow-y:auto}
 #ov>div{margin:auto;padding:20px 0}
-#vid{width:min(320px,80vw);max-height:50vh;border-radius:16px;margin-top:18px;border:2px solid rgba(255,255,255,.5);box-shadow:0 10px 30px rgba(0,0,0,.5);background:#000;opacity:0}
+#vid{pointer-events:none;width:min(320px,80vw);max-height:50vh;border-radius:16px;margin-top:18px;border:2px solid rgba(255,255,255,.5);box-shadow:0 10px 30px rgba(0,0,0,.5);background:#000;opacity:0}
 #ov.on #vid{animation:fade2 1.5s 2.4s forwards}
 </style>
 </head>
@@ -81,7 +81,7 @@ button.in{opacity:1}
 <div id="wel"><div class="wh">💌</div><h2>Angy, tengo algo para ti</h2><p>Sube el volumen 🎶</p><div class="tap">Toca para abrir</div></div>
 <div id="env"><div class="env" id="e"><div class="flap"></div><div class="seal">💗</div></div></div>
 <div id="paper"><h1>Para mi Angy 💗</h1><div id="lines"></div></div>
-<div id="ov"><div><div class="af">A <i>💗</i> F</div><p class="ded">Para ti, Angy: mi persona favorita, mi calma y mi todo. Gracias por ser tú.<span>Con todo mi amor, Fer</span></p><video id="vid" controls playsinline preload="metadata"><source src="nosotros.mp4" type="video/mp4"></video><div class="cl">Toca fuera del video para cerrar</div></div></div>
+<div id="ov"><div><div class="af">A <i>💗</i> F</div><p class="ded">Para ti, Angy: mi persona favorita, mi calma y mi todo. Gracias por ser tú.<span>Con todo mi amor, Fer</span></p><video id="vid" muted loop playsinline preload="auto" disablepictureinpicture disableremoteplayback><source src="nosotros.mp4" type="video/mp4"></video><div class="cl">Toca para cerrar</div></div></div>
 <script>
 const fx=document.getElementById('fx'),icons=['💗','💖','💕','🌸','✨'];
 // estrellas
@@ -140,6 +140,7 @@ const ov=document.getElementById('ov');
 function boom(){
   for(let w=0;w<3;w++)setTimeout(()=>{for(let i=0;i<60;i++){const e=document.createElement('span');e.className='ex';e.textContent=icons[Math.floor(Math.random()*5)];const a=Math.random()*6.283,d=120+Math.random()*Math.max(innerWidth,innerHeight)*.7;e.style.setProperty('--dx',Math.cos(a)*d+'px');e.style.setProperty('--dy',Math.sin(a)*d+'px');e.style.setProperty('--r',(Math.random()*720-360)+'deg');e.style.fontSize=(16+Math.random()*34)+'px';document.body.appendChild(e);setTimeout(()=>e.remove(),2100)}},w*350);
   setTimeout(()=>ov.classList.add('on'),500);
+  setTimeout(()=>{vid.currentTime=0;vid.play().catch(()=>{})},2900);
   setTimeout(()=>rain(40),1500);
 }
 ov.onclick=()=>{ov.classList.remove('on');vid.pause();mus.play().catch(()=>{})};
@@ -152,10 +153,6 @@ function start(){
   setTimeout(()=>{document.getElementById('env').classList.add('gone');paper.classList.add('show');play()},2300);
 }
 wel.addEventListener('pointerdown',start,{once:true});
-vid.addEventListener('click',e=>e.stopPropagation());
-vid.addEventListener('play',()=>mus.pause());
-vid.addEventListener('pause',()=>{if(ov.classList.contains('on'))mus.play().catch(()=>{})});
-vid.addEventListener('ended',()=>{mus.play().catch(()=>{})});
 vid.addEventListener('error',()=>{vid.style.display='none'},true);
 
 </script>
